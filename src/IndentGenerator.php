@@ -41,16 +41,15 @@ class IndentGenerator
     * @param NULL|string $result - pervious result
     * @returns generated string
     */
-    function generateFromArray($arr, $depth = 0, $result = "")
+    function generateFromArray($arr, $depth = 0, $full = true)
     {
         $indents = str_repeat($this->tabs ? "\t" : "    ", $depth);
         $step    = "";
 
-        foreach($arr as $key=>$value) {
-            $step .= is_integer($key) ? "$indents$value\n" : "$indents$key\n".$this->generateFromArray($value, ($depth + 1), NULL);
-        }
+        foreach($arr as $key=>$value)
+            $step .= is_integer($key) ? "$indents$value\n" : "$indents$key\n".$this->generateFromArray($value, ($depth + 1), false);
         
-        return is_null($result) ? $step : substr($result.$step, 0, -1);
+        return $full ? substr($step, 0, -1) : $step;
     }
 
     /**
@@ -76,10 +75,10 @@ class IndentGenerator
         switch ($type = gettype($source)) {
             case "array":
                 return $this->generateFromArray($source);
-                break;
+
             case "object":
                 return $this->generateFromObject($source);
-                break;
+
             default:
                 throw new IndentParseException("Source should be either be an array or an object, but not $type.");
         }

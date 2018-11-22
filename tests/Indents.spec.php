@@ -7,10 +7,12 @@ use Webmozart\Assert\Assert;
 describe("Indents", function() {
     beforeEach(function() {
         $this->parser = new Indents;
+        $this->DATATYPES_FILE   = "files/Types.xis";
         $this->CORRECT_FILE     = "files/Animalia.xis";
         $this->INCORRECT_FILE   = "files/Animalia-broken.xis";
         $this->CORRECT_STRING   = file_get_contents($this->CORRECT_FILE);
         $this->INCORRECT_STRING = file_get_contents($this->INCORRECT_FILE);
+        $this->DATATYPES_STRING = file_get_contents($this->DATATYPES_FILE);
         $this->CORRECT_RESULT   = require("files/expected/correct.php");
     });
     

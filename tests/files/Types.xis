@@ -1,0 +1,22 @@
+Datatypes
+    Number
+        Float
+            0.102
+            0.288
+            13.0
+        Integer
+            Decimal
+                14
+                02
+                2004
+                10
+            Hexadecimal %Hexadecimal values are being converted only if CType extension is installed
+                0x1BB
+                0x1E3
+                0x147AE1540959CD3
+                0xFO0
+        String
+            Hello
+            World!
+            12.2.
+            0xFO0

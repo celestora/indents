@@ -22,7 +22,8 @@ class Indents
     */
     private function setInput($string)
     {
-        $this->input = str_replace("\r\n", "\n", str_replace("    ", "\t", $string));
+        $string      = str_replace("\r\n", "\n", str_replace("    ", "\t", $string));
+        $this->input = preg_replace("/[ ]?(Rem|%)(.++)$/m", "", $string);
     }
     
     /**
@@ -53,6 +54,21 @@ class Indents
     }
     
     /**
+    * @param string $element - element
+    * @returns value of element with correct type
+    */
+    private function elval($element)
+    {
+        if(is_numeric($element)) return $element + 0;
+        if(substr($element, 0, 2) === "0x" && extension_loaded("ctype")) {
+            $xdigit = substr($element, 2);
+            if(ctype_xdigit($xdigit)) return eval("return $element;") + 0;
+        }
+        
+        return $element;
+    }
+    
+    /**
     * Determines the strategy, then pushes element to its coresponding place in stack.
     * @param   string  $element - the element, should be string, the conversion to other types is being done automatically.
     * @param   integer $indents - the number of indents before the element in document.
@@ -62,7 +78,8 @@ class Indents
     private function push_to_stack($element, $indents)
     {
         if($element === "\n" || ord($element) === 0) return; #Ignore meaningless characters
-    
+
+        $element = $this->elval($element);
         if($indents === 0 && is_null($this->path)) {
             $this->stack[$element] = [];
             $this->path            = [$element];
