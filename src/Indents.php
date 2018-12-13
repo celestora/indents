@@ -18,12 +18,27 @@ class Indents
     
     /**
     * Sets and formats the input.
-    @param string $string - input as string.
+    * @param string $string - input as string.
     */
     private function setInput($string)
     {
         $string      = str_replace("\r\n", "\n", str_replace("    ", "\t", $string));
         $this->input = preg_replace("/[ ]?(Rem|%)(.++)$/m", "", $string);
+    }
+    
+    /**
+    * Counts indent level
+    * @param string $string - string
+    * @returns indent level
+    */
+    private function countIndentLevel($string)
+    {
+        $level = 0;
+        foreach(str_split($string) as $char) {
+            if($char !== "\t") break;
+            $level++;
+        }
+        return $level;
     }
     
     /**
@@ -119,7 +134,7 @@ class Indents
     {
         $list = explode("\n", $this->input);
         foreach($list as $row) {
-            $indents = preg_match_all("/\\t/", $row);
+            $indents = $this->countIndentLevel($row);
             $this->push_to_stack(preg_replace("/[\\t]+/", "", $row), $indents);
         }
         return $as ? $this->stack : (object) $this->stack;
