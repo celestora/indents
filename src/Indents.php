@@ -1,6 +1,5 @@
 <?php
 namespace Maximizer\Indentations;
-include_once "IndentParseException.php";
 
 /**
 * Parser of indented strings.
@@ -20,7 +19,7 @@ class Indents
     * Sets and formats the input.
     * @param string $string - input as string.
     */
-    private function setInput($string)
+    private function setInput(string $string): void
     {
         $string      = str_replace("\r\n", "\n", str_replace("    ", "\t", $string));
         $this->input = preg_replace("/[ ]?(Rem|%)(.++)$/m", "", $string);
@@ -31,20 +30,21 @@ class Indents
     * @param string $string - string
     * @returns indent level
     */
-    private function countIndentLevel($string)
+    private function countIndentLevel(string $string): int
     {
         $level = 0;
         foreach(str_split($string) as $char) {
             if($char !== "\t") break;
             $level++;
         }
+        
         return $level;
     }
     
     /**
     * @returns pointer to the current node in stack.
     */
-    private function &getByPath()
+    private function &getByPath(): array
     {
         $array = &$this->stack;
         foreach($this->path as $index) {
@@ -58,7 +58,7 @@ class Indents
     * Modifies the path to be pointing to the newly generated node.
     * @returns pointer to the new node in stack.
     */
-    private function &forkByPath()
+    private function &forkByPath(): array
     {
         $parent           = &$this->getByPath();
         $current          = end($parent);
@@ -72,7 +72,7 @@ class Indents
     * @param string $element - element
     * @returns value of element with correct type
     */
-    private function elval($element)
+    private function elval(string $element)
     {
         if(is_numeric($element)) return $element + 0;
         if(substr($element, 0, 2) === "0x" && extension_loaded("ctype")) {
@@ -90,7 +90,7 @@ class Indents
     * @throws  IndentParseException
     * @returns void
     */
-    private function push_to_stack($element, $indents)
+    private function push_to_stack(string $element, int $indents): void
     {
         if($element === "\n" || ord($element) === 0) return; #Ignore meaningless characters
 
@@ -130,7 +130,7 @@ class Indents
     * @param   integer $as - mode code (example, IndentParser::TO_OBJECT)
     * @returns stack depending on selected mode.
     */
-    private function parse_tree($as)
+    private function parse_tree(int $as)
     {
         $list = explode("\n", $this->input);
         foreach($list as $row) {
@@ -147,7 +147,7 @@ class Indents
     * @see   IndentParser->parseFromFile
     * @returns stack depending on selected mode.
     */
-    function parseFromString($string, $mode = 0)
+    function parseFromString(string $string, int $mode = 0)
     {
         $this->setInput($string);
         return $this->parse_tree($mode);
@@ -160,7 +160,7 @@ class Indents
     * @see   IndentParser->parseFromString
     * @returns stack depending on selected mode.
     */
-    function parseFromFile($file, $mode = 0)
+    function parseFromFile(string $file, int $mode = 0)
     {
         $this->setInput(file_get_contents($file));
         return $this->parse_tree($mode);

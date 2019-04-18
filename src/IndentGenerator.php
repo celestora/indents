@@ -1,6 +1,5 @@
 <?php
 namespace Maximizer\Indentations;
-include_once "IndentParseException.php";
 
 /**
 * Class, that is used to generate indented strings from objects and arrays.
@@ -21,15 +20,15 @@ class IndentGenerator
     /**
     * Asserts correct array scheme
     * @param  array $arr - array
-    * @throws IndentParseException
+    * @throws IndentGenrationException
     * @return array
     */
-    private function assertArrayValidity($arr)
+    private function assertArrayValidity(array $arr): array
     {
         if(!is_array($arr[0]))
-            throw new IndentParseException("Root node must contain children");
+            throw new IndentGenrationException("Root node must contain children");
         else if(sizeof($arr) > 1)
-            throw new IndentParseException("Only one root node may be used!");
+            throw new IndentGenrationException("Only one root node may be used!");
             
         return $arr;
     }
@@ -41,7 +40,7 @@ class IndentGenerator
     * @param NULL|string $result - pervious result
     * @returns generated string
     */
-    function generateFromArray($arr, $depth = 0, $full = true)
+    function generateFromArray(array $arr, int $depth = 0, bool $full = true): string
     {
         $indents = str_repeat($this->tabs ? "\t" : "    ", $depth);
         $step    = "";
@@ -58,7 +57,7 @@ class IndentGenerator
     * @see   IndentGenerator->generateFromArray
     * @returns generated string
     */
-    function generateFromObject($obj)
+    function generateFromObject(object $obj): string
     {
         return $this->generateFromArray($this->assertArrayValidity((array) $obj));
     }
@@ -70,7 +69,7 @@ class IndentGenerator
     * @see   IndentGenerator->generateFromArray
     * @returns generated string
     */
-    function generate($source)
+    function generate($source): string
     {
         switch ($type = gettype($source)) {
             case "array":
@@ -80,7 +79,7 @@ class IndentGenerator
                 return $this->generateFromObject($source);
 
             default:
-                throw new IndentParseException("Source should be either be an array or an object, but not $type.");
+                throw new IndentGenrationException("Source should be either be an array or an object, but not $type.");
         }
     }
 
