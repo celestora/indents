@@ -3,7 +3,7 @@
 
 A small library to help you parse and generate indented strings.
 
-[ ![Codeship Status for kfcjew/indents](https://app.codeship.com/projects/5cfe8bb0-d000-0136-a5d8-6eade3517f6a/status?branch=master)](https://app.codeship.com/projects/316012)
+[ ![Codeship Status for kfcjew/indents](https://app.codeship.com/projects/5cfe8bb0-d000-0136-a5d8-6eade3517f6a/status?branch=master)](https://app.codeship.com/projects/316012) [![CodeFactor](https://www.codefactor.io/repository/github/hioi/indents/badge)](https://www.codefactor.io/repository/github/hioi/indents)
 
 ## Indented strings vs YAML
 YAML is a full-featured markup language, while indented strings have only two base datatypes: Object node and string/int/float.\
